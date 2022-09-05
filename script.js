@@ -60,3 +60,32 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
+
+const displayMovements = function (movements) {
+  //Empty the entire movements container
+  /*NOTE:
+   * textContents is all text contained by an element and all its children that are for formatting purposes only.
+   * innerText returns all text contained by an element and all its child elements.
+   * innerHtml returns all text, including html tags, that is contained by an element.
+   */
+  containerMovements.innerHTML = '';
+
+  movements.forEach(function (transactionAmount, index) {
+    //Designate the type of transaction
+    const type = transactionAmount > 0 ? 'deposit' : 'withdrawal';
+
+    //Render the transaction on the screen inside the class="movements" container element
+    const htmlInsert = `
+    <div class="movements__row">
+      <div class="movements__type movements__type--${type}">${
+      index + 1
+    } ${type}</div>
+      <div class="movements__date">3 days ago</div>
+      <div class="movements__value">${transactionAmount}</div>
+    </div>
+    `;
+    containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
+  });
+};
+
+displayMovements(account1.movements);

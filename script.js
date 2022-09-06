@@ -61,7 +61,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-//DISPLAY USER TRANSACTION DATA
+//FUNCTION-DISPLAY USER TRANSACTION DATA
 const displayMovements = function (movements) {
   //Empty the entire movements container
   /*NOTE:
@@ -82,7 +82,7 @@ const displayMovements = function (movements) {
       index + 1
     } ${type}</div>
       <div class="movements__date">3 days ago</div>
-      <div class="movements__value">${transactionAmount}</div>
+      <div class="movements__value">${transactionAmount}€</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
@@ -90,14 +90,34 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
-//CALCULATE AND RENDER THE ACCOUNT BALANCE
+//FUNCTION-CALCULATE AND RENDER THE ACCOUNT BALANCE
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance}€`;
 };
 calcDisplayBalance(account1.movements);
 
-//SAVE USER NAME INITIALS ON THE ACCOUNT OBJECTS
+//FUNCTION-CALCULATE TRANSACTIONS DISPLAY SUMMARY
+const calcDisplaySummary = function (movements, interestRate) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+
+  const expenses = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(expenses)}€`;
+
+  const interests = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * interestRate) / 100)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumInterest.textContent = `${interests}€`;
+};
+calcDisplaySummary(account1.movements, account1.interestRate);
+
+//FUNCTION-SAVE USER NAME INITIALS ON THE ACCOUNT OBJECTS
 const createUserName = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -107,5 +127,4 @@ const createUserName = function (accs) {
       .join('');
   });
 };
-
 createUserName(accounts);

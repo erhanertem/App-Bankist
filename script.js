@@ -88,8 +88,14 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
   });
 };
-
 displayMovements(account1.movements);
+
+//CALCULATE AND RENDER THE ACCOUNT BALANCE
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance}€`;
+};
+calcDisplayBalance(account1.movements);
 
 //SAVE USER NAME INITIALS ON THE ACCOUNT OBJECTS
 const createUserName = function (accs) {
@@ -103,4 +109,3 @@ const createUserName = function (accs) {
 };
 
 createUserName(accounts);
-// console.log(accounts);

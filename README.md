@@ -8,11 +8,12 @@
 
 - Get into programming algorithm and logic diagram
 - Implement JavaScript DOM and Events fundamentals
+  - Template literals as means of injecting HTML code blocks
   - insertAdjacentHTML()
   - innerHTML vs innerText vs textContents
 - JS fundamentals
   - Working with arrays
-  - Template literals as means of injecting HTML code blocks
+    - forEach()
 
 &emsp;
 

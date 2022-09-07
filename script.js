@@ -178,6 +178,9 @@ btnTransfer.addEventListener('click', function (e) {
   ); //Attain to whom send to from the input field by macthing the customer list
   // console.log(amount, receiverAcc);
 
+  //CLEAR RECEIPIENT/AMOUNT INPUT FIELDS
+  inputTransferTo.value = inputTransferAmount.value = '';
+
   if (
     amount > 0 && //check amount send,
     currentAccount.balance >= amount && // enough balance exists?,
@@ -188,8 +191,6 @@ btnTransfer.addEventListener('click', function (e) {
     //TRANSFER MONEY
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
-    //CLEAR RECEIPIENT/AMOUNT INPUT FIELDS
-    inputTransferTo.value = inputTransferAmount.value = '';
     //UPDATE UI
     updateUI(currentAccount);
   }

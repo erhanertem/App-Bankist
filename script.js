@@ -250,9 +250,12 @@ btnClose.addEventListener('click', function (e) {
 });
 
 //EVENTHANDLER--SORT
+let sorted = false; // intermediary variable that lets us switch the states
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  console.log('SORT');
-  console.log(currentAccount);
-  displayMovements(currentAccount, true); //sort set to true as function argument
+  // console.log('SORT');
+  // console.log(currentAccount);
+  // displayMovements(currentAccount, true); //sort set to true as function argument
+  displayMovements(currentAccount, !sorted); //sort set to true as function argument
+  sorted = !sorted; //Negate the current sorted state to enable sowtching the next time
 });

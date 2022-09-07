@@ -62,7 +62,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 //FUNCTION-DISPLAY USER TRANSACTION DATA
-const displayMovements = function (acc) {
+const displayMovements = function (acc, sort = false) {
   //Empty the entire movements container
   /*NOTE:
    * textContents is all text contained by an element and all its children that are for formatting purposes only.
@@ -71,7 +71,15 @@ const displayMovements = function (acc) {
    */
   containerMovements.innerHTML = '';
 
-  acc.movements.forEach(function (mov, index) {
+  //DEPENDING ON SORT CLICKED, SORT BY TRANSACTION DATE VERSUS ASCENDING ORDER SWITCH
+  const movs = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
+  // slice() to make a shallow copy as sort mutates the array
+  // if sort =true slice().sort() else keep array as it appears by date of transaction
+
+  //RENDER THE TRANSACTION LINES PER SORT TYPE
+  movs.forEach(function (mov, index) {
     //Designate the type of transaction
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
@@ -136,7 +144,7 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
-//MAINTASK--USER LOGIN
+//EVENTHANDLER--USER LOGIN
 
 let currentAccount;
 createUserName(accounts);
@@ -169,7 +177,7 @@ btnLogin.addEventListener('click', function (e) {
   }
 });
 
-//MAINTASK--TRANSFER MONEY
+//EVENTHANDLER--TRANSFER MONEY
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log("TRANSFER")
@@ -197,7 +205,7 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
-//MAINTASK--REQUEST LOAN
+//EVENTHANDLER--REQUEST LOAN
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log('LOAN');
@@ -215,7 +223,7 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
 });
 
-//MAINTASK--CLOSE ACCOUNT
+//EVENTHANDLER--CLOSE ACCOUNT
 btnClose.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log("DELETE")
@@ -239,4 +247,12 @@ btnClose.addEventListener('click', function (e) {
   }
   //RESET CLOSE ACCOUNT INPUT FIELDS
   inputCloseUsername.value = inputClosePin.value = '';
+});
+
+//EVENTHANDLER--SORT
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  console.log('SORT');
+  console.log(currentAccount);
+  displayMovements(currentAccount, true); //sort set to true as function argument
 });

@@ -126,6 +126,16 @@ const createUserName = function (accs) {
   });
 };
 
+//FUNCTION-UPDATE UI
+const updateUI = function (acc) {
+  //DISPLAY MOVEMENTS
+  displayMovements(acc);
+  //DISPLAY BALANCE
+  calcDisplayBalance(acc);
+  //DISPLAY SUMMARY
+  calcDisplaySummary(acc);
+};
+
 //MAINTASK--USER LOGIN
 
 let currentAccount;
@@ -154,12 +164,8 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur(); //IMPORTANT: removes the focus from the element
     //TODO-SWITCH login btn with logout
-    //DISPLAY MOVEMENTS
-    displayMovements(currentAccount);
-    //DISPLAY BALANCE
-    calcDisplayBalance(currentAccount);
-    //DISPLAY SUMMARY
-    calcDisplaySummary(currentAccount);
+
+    updateUI(currentAccount);
   }
 });
 

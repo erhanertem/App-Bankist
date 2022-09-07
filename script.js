@@ -91,8 +91,8 @@ const displayMovements = function (acc) {
 
 //FUNCTION-CALCULATE AND RENDER THE ACCOUNT BALANCE
 const calcDisplayBalance = function (acc) {
-  const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance}€`;
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance}€`;
 };
 
 //FUNCTION-CALCULATE TRANSACTIONS DISPLAY SUMMARY

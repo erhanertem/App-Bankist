@@ -129,3 +129,31 @@ const createUserName = function (accs) {
   });
 };
 createUserName(accounts);
+
+//FUNCTION-USER LOGIN
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  //IMPORTANT: STOP BUTTON ELEMENT TO REFRESH WEB PAGE/PREVENT FORM FROM SUBMITTING ON ITSELF
+  e.preventDefault();
+  // console.log('LOGIN');
+  //SUBTASK--CHECK IF THE USERNAME EXISTS
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  // console.log(currentAccount);
+  //SUBTASK--IF USERNAME IS AVAILABLE, DOES THE PIN MATCH TO WHAT IS IN THE DATA?
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    console.log('LOGIN SUCCESFULL');
+    //DISPLAY UI MESSAGE
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+    //DISPLAY MOVEMENTS
+
+    //DISPLAY BALANCE
+
+    //DISPLAY SUMMARY
+  }
+});

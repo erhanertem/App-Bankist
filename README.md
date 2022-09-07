@@ -11,6 +11,8 @@
   - Template literals as means of injecting HTML code blocks
   - insertAdjacentHTML()
   - innerHTML vs innerText vs textContents
+- Utilize HTMLdOM Element function
+  - blur()
 - JS fundamentals
   - Working with arrays
     - forEach()

@@ -88,14 +88,12 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
   });
 };
-displayMovements(account1.movements);
 
 //FUNCTION-CALCULATE AND RENDER THE ACCOUNT BALANCE
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance}€`;
 };
-calcDisplayBalance(account1.movements);
 
 //FUNCTION-CALCULATE TRANSACTIONS DISPLAY SUMMARY
 const calcDisplaySummary = function (movements, interestRate) {
@@ -116,7 +114,6 @@ const calcDisplaySummary = function (movements, interestRate) {
     .reduce((acc, mov) => acc + mov, 0);
   labelSumInterest.textContent = `${interests}€`;
 };
-calcDisplaySummary(account1.movements, account1.interestRate);
 
 //FUNCTION-SAVE USER NAME INITIALS ON THE ACCOUNT OBJECTS
 const createUserName = function (accs) {
@@ -145,15 +142,21 @@ btnLogin.addEventListener('click', function (e) {
   //SUBTASK--IF USERNAME IS AVAILABLE, DOES THE PIN MATCH TO WHAT IS IN THE DATA?
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     console.log('LOGIN SUCCESFULL');
+    //SUBTASK--POST LOGIN PROCESSES
     //DISPLAY UI MESSAGE
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
+    //DISPLAY BANKING FUNCTIONS UI
     containerApp.style.opacity = 100;
+    //CLEAR USERNAME/PASS INPUT FIELDS
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur(); //IMPORTANT: removes the focus from the element
     //DISPLAY MOVEMENTS
-
+    displayMovements(currentAccount.movements);
     //DISPLAY BALANCE
-
+    calcDisplayBalance(currentAccount.movements);
     //DISPLAY SUMMARY
+    calcDisplaySummary(currentAccount.movements, currentAccount.interestRate);
   }
 });

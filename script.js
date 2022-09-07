@@ -164,7 +164,7 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur(); //IMPORTANT: removes the focus from the element
     //TODO-SWITCH login btn with logout
-
+    //UPDATE UI
     updateUI(currentAccount);
   }
 });
@@ -190,5 +190,7 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAcc.movements.push(amount);
     //CLEAR RECEIPIENT/AMOUNT INPUT FIELDS
     inputTransferTo.value = inputTransferAmount.value = '';
+    //UPDATE UI
+    updateUI(currentAccount);
   }
 });

@@ -165,10 +165,24 @@ btnLogin.addEventListener('click', function (e) {
 
 //MAINTASK--TRANSFER MONEY
 btnTransfer.addEventListener('click', function (e) {
-  e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  e.preventDefault(); //Prevent default button submit behaviour
+  const amount = Number(inputTransferAmount.value); //Attain transfer amount from the input field
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
-  );
+  ); //Attain to whom send to from the input field by macthing the customer list
   // console.log(amount, receiverAcc);
+
+  if (
+    amount > 0 && //check amount send,
+    currentAccount.balance >= amount && // enough balance exists?,
+    receiverAcc && // receiver acc typed?
+    receiverAcc?.username !== currentAccount.username // sender/receiver are not same?
+  ) {
+    // console.log('Transfer valid');
+    //TRANSFER MONEY
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    //CLEAR RECEIPIENT/AMOUNT INPUT FIELDS
+    inputTransferTo.value = inputTransferAmount.value = '';
+  }
 });

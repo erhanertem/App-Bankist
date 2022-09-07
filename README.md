@@ -15,7 +15,7 @@
     - blur(), preventDefault(), insertAdjacentHTML()
 - JS fundamentals
   - Working with array and string methods:
-    - forEach(), push(), find(), findIndex(), join(), split(), filter(), reduce(), map(), Number()
+    - forEach(), push(), find(), some(), every(), findIndex(), join(), split(), filter(), reduce(), map(), Number()
   - Utilize method chaining
 
 &emsp;

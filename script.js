@@ -197,6 +197,24 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+//MAINTASK--REQUEST LOAN
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault(); //Prevent default button submit behaviour
+  // console.log('LOAN');
+  const loanRequestAmount = Number(inputLoanAmount.value);
+  if (
+    loanRequestAmount > 0 &&
+    currentAccount.movements.some(mov => mov > loanRequestAmount * 0.1)
+  ) {
+    //ADD MOVEMENT
+    currentAccount.movements.push(loanRequestAmount);
+    //UPDATE UI
+    updateUI(currentAccount);
+  }
+  //CLEAR LOAN INPUT VALUE
+  inputLoanAmount.value = '';
+});
+
 //MAINTASK--CLOSE ACCOUNT
 btnClose.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour

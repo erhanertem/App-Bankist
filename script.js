@@ -62,7 +62,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 //FUNCTION-DISPLAY USER TRANSACTION DATA
-const displayMovements = function (movements) {
+const displayMovements = function (acc) {
   //Empty the entire movements container
   /*NOTE:
    * textContents is all text contained by an element and all its children that are for formatting purposes only.
@@ -71,9 +71,9 @@ const displayMovements = function (movements) {
    */
   containerMovements.innerHTML = '';
 
-  movements.forEach(function (transactionAmount, index) {
+  acc.movements.forEach(function (mov, index) {
     //Designate the type of transaction
-    const type = transactionAmount > 0 ? 'deposit' : 'withdrawal';
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     //Render the transaction on the screen inside the class="movements" container element
     const htmlInsert = `
@@ -82,7 +82,7 @@ const displayMovements = function (movements) {
       index + 1
     } ${type}</div>
       <div class="movements__date">3 days ago</div>
-      <div class="movements__value">${transactionAmount}€</div>
+      <div class="movements__value">${mov}€</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
@@ -90,26 +90,26 @@ const displayMovements = function (movements) {
 };
 
 //FUNCTION-CALCULATE AND RENDER THE ACCOUNT BALANCE
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+const calcDisplayBalance = function (acc) {
+  const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance}€`;
 };
 
 //FUNCTION-CALCULATE TRANSACTIONS DISPLAY SUMMARY
-const calcDisplaySummary = function (movements, interestRate) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
-  const expenses = movements
+  const expenses = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(expenses)}€`;
 
-  const interests = movements
+  const interests = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * interestRate) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => int >= 1) //exclude interests lesser than 1euro
     .reduce((acc, mov) => acc + mov, 0);
   labelSumInterest.textContent = `${interests}€`;
@@ -125,10 +125,11 @@ const createUserName = function (accs) {
       .join('');
   });
 };
-createUserName(accounts);
 
-//FUNCTION-USER LOGIN
+//MAINTASK--USER LOGIN
+
 let currentAccount;
+createUserName(accounts);
 
 btnLogin.addEventListener('click', function (e) {
   //IMPORTANT: STOP BUTTON ELEMENT TO REFRESH WEB PAGE/PREVENT FORM FROM SUBMITTING ON ITSELF
@@ -152,11 +153,22 @@ btnLogin.addEventListener('click', function (e) {
     //CLEAR USERNAME/PASS INPUT FIELDS
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur(); //IMPORTANT: removes the focus from the element
+    //TODO-SWITCH login btn with logout
     //DISPLAY MOVEMENTS
-    displayMovements(currentAccount.movements);
+    displayMovements(currentAccount);
     //DISPLAY BALANCE
-    calcDisplayBalance(currentAccount.movements);
+    calcDisplayBalance(currentAccount);
     //DISPLAY SUMMARY
-    calcDisplaySummary(currentAccount.movements, currentAccount.interestRate);
+    calcDisplaySummary(currentAccount);
   }
+});
+
+//MAINTASK--TRANSFER MONEY
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  // console.log(amount, receiverAcc);
 });

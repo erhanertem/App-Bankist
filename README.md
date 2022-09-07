@@ -7,15 +7,16 @@
 ### **Objective:** Create app for a fictitious Bank called 'Bankist'
 
 - Get into programming algorithm and logic diagram
-- Implement JavaScript DOM and Events fundamentals
-  - Template literals as means of injecting HTML code blocks
-  - insertAdjacentHTML()
-  - innerHTML vs innerText vs textContents
-- Utilize HTMLdOM Element function
-  - blur()
+- JS DOM Manipulation and Events
+  - Ponder on HTML DOM Elements
+    - innerHTML vs innerText vs textContents
+    - Template literals as means of injecting HTML code blocks along with insertAdjacentHTML() DOM method
+  - Utilize HTML DOM Methods
+    - blur(), preventDefault(), insertAdjacentHTML()
 - JS fundamentals
-  - Working with arrays
-    - forEach()
+  - Working with array and string methods:
+    - forEach(), push(), find(), findIndex(), join(), split(), filter(), reduce(), map(), Number()
+  - Utilize method chaining
 
 &emsp;
 

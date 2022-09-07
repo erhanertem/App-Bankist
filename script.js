@@ -152,7 +152,7 @@ btnLogin.addEventListener('click', function (e) {
   // console.log(currentAccount);
   //SUBTASK--IF USERNAME IS AVAILABLE, DOES THE PIN MATCH TO WHAT IS IN THE DATA?
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    console.log('LOGIN SUCCESFULL');
+    // console.log('LOGIN SUCCESFULL');
     //SUBTASK--POST LOGIN PROCESSES
     //DISPLAY UI MESSAGE
     labelWelcome.textContent = `Welcome back, ${
@@ -172,10 +172,11 @@ btnLogin.addEventListener('click', function (e) {
 //MAINTASK--TRANSFER MONEY
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
+  // console.log("TRANSFER")
   const amount = Number(inputTransferAmount.value); //Attain transfer amount from the input field
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
-  ); //Attain to whom send to from the input field by macthing the customer list
+  ); //Attain to whom send to from the input field by checking against the customer list
   // console.log(amount, receiverAcc);
 
   //CLEAR RECEIPIENT/AMOUNT INPUT FIELDS
@@ -193,5 +194,29 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAcc.movements.push(amount);
     //UPDATE UI
     updateUI(currentAccount);
+  }
+});
+
+//MAINTASK--CLOSE ACCOUNT
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault(); //Prevent default button submit behaviour
+  // console.log("DELETE")
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    // NOTE: findIndex() is used here instead of indexOf() since we are trying to solicit the object data inside one of the elements of the array not the array element itself.
+    // console.log(index);
+    //DELETE THE USER FROM THE ACCOUNTS DATA
+    accounts.splice(index, 1);
+    // console.log(accounts);
+    //HIDE ACCOUNT UI
+    containerApp.style.opacity = 0;
+    //RESET LOGIN UI MESSAGE
+    labelWelcome.textContent = 'Log in to get started';
   }
 });

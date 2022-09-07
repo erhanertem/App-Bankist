@@ -219,4 +219,6 @@ btnClose.addEventListener('click', function (e) {
     //RESET LOGIN UI MESSAGE
     labelWelcome.textContent = 'Log in to get started';
   }
+  //RESET CLOSE ACCOUNT INPUT FIELDS
+  inputCloseUsername.value = inputClosePin.value = '';
 });

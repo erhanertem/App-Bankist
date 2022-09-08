@@ -107,6 +107,10 @@ const displayMovements = function (acc, sort = false) {
     `;
     containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
   });
+
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i % 2 === 0) row.style.backgroundColor = '#EBEBEB';
+  });
 };
 
 //FUNCTION-CALCULATE AND RENDER THE ACCOUNT BALANCE

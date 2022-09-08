@@ -102,7 +102,7 @@ const displayMovements = function (acc, sort = false) {
       index + 1
     } ${type}</div>
       <div class="movements__date">3 days ago</div>
-      <div class="movements__value">${mov}€</div>
+      <div class="movements__value">${mov.toFixed(2)}€</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
@@ -112,7 +112,7 @@ const displayMovements = function (acc, sort = false) {
 //FUNCTION-CALCULATE AND RENDER THE ACCOUNT BALANCE
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 //FUNCTION-CALCULATE TRANSACTIONS DISPLAY SUMMARY
@@ -125,14 +125,14 @@ const calcDisplaySummary = function (acc) {
   const expenses = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(expenses)}€`;
+  labelSumOut.textContent = `${Math.abs(expenses).toFixed(2)}€`;
 
   const interests = acc.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => int >= 1) //exclude interests lesser than 1euro
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumInterest.textContent = `${interests}€`;
+  labelSumInterest.textContent = `${interests.toFixed(2)}€`;
 };
 
 //FUNCTION-SAVE USER NAME INITIALS ON THE ACCOUNT OBJECTS
@@ -221,7 +221,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log('LOAN');
-  const loanRequestAmount = +inputLoanAmount.value;
+  const loanRequestAmount = Math.floor(inputLoanAmount.value);
   if (
     loanRequestAmount > 0 &&
     currentAccount.movements.some(mov => mov > loanRequestAmount * 0.1)
@@ -269,5 +269,6 @@ btnSort.addEventListener('click', function (e) {
   // console.log(currentAccount);
   // displayMovements(currentAccount, true); //sort set to true as function argument
   displayMovements(currentAccount, !sorted); //sort set to true as function argument
-  sorted = !sorted; // IMPORTANT: Negate the current sorted state to enable sowtching the next time. Without this, the state would have never been switching
+  sorted = !sorted;
+  // IMPORTANT: Negate the current sorted state to enable sowtching the next time. Without this, the state would have never been switching
 });

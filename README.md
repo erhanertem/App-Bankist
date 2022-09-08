@@ -17,6 +17,8 @@
   - Working with array and string methods:
     - forEach(), push(), find(), some(), every(), findIndex(), join(), split(), filter(), reduce(), map(), Number()
   - Utilize method chaining
+  - Working with Math object methods
+    - Math.floor(), .toFixed()
 
 &emsp;
 

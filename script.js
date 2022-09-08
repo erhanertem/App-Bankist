@@ -171,7 +171,7 @@ btnLogin.addEventListener('click', function (e) {
   );
   // console.log(currentAccount);
   //SUBTASK--IF USERNAME IS AVAILABLE, DOES THE PIN MATCH TO WHAT IS IN THE DATA?
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+  if (currentAccount?.pin === +inputLoginPin.value) {
     // console.log('LOGIN SUCCESFULL');
     //SUBTASK--POST LOGIN PROCESSES
     //DISPLAY UI MESSAGE
@@ -193,7 +193,7 @@ btnLogin.addEventListener('click', function (e) {
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log("TRANSFER")
-  const amount = Number(inputTransferAmount.value); //Attain transfer amount from the input field
+  const amount = +inputTransferAmount.value; //Attain transfer amount from the input field
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   ); //Attain to whom send to from the input field by checking against the customer list
@@ -221,7 +221,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log('LOAN');
-  const loanRequestAmount = Number(inputLoanAmount.value);
+  const loanRequestAmount = +inputLoanAmount.value;
   if (
     loanRequestAmount > 0 &&
     currentAccount.movements.some(mov => mov > loanRequestAmount * 0.1)

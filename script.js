@@ -73,6 +73,15 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+//FUNCTION DATE REGISTER
+const formatMovementDate = function (date) {
+  const day = `${date.getDate()}`.padStart(2, 0);
+  const month = `${date.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
+  const year = date.getFullYear();
+  const displayDate = `${day}/${month}/${year}`;
+  return displayDate;
+};
+
 //FUNCTION DISPLAY USER TRANSACTION DATA
 const displayMovements = function (acc, sort = false) {
   //#1 EMPTY THE ENTIRE MOVEMENTS CONTAINER
@@ -103,10 +112,11 @@ const displayMovements = function (acc, sort = false) {
     //#4.2 Provide the date of transaction for each item
     const date = new Date(acc.movementsDates[index]);
     //NOTE First create a javascript date object from the given input
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
-    const year = date.getFullYear();
-    const displayDate = `${day}/${month}/${year}`;
+
+    //#4.2.1 TIME STAMP CHECK FOR TODAY & YESTERDAY, OR REGULAR TIME STAMP?
+
+    //#4.2.2 TIME STAMP OLDER DAYS IN REGULAR FORMAT
+    const displayDate = formatMovementDate(date);
 
     //#4.3 Render the transaction on the screen inside the class="movements" container element
     const htmlInsert = `

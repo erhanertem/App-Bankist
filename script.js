@@ -93,9 +93,8 @@ const formatMovementDate = function (acc, date) {
       month: '2-digit',
       year: 'numeric',
     };
-    return new Intl.DateTimeFormat(acc.movementsDates.locale, options).format(
-      date
-    );
+    // console.log(acc.locale);
+    return new Intl.DateTimeFormat(acc.locale, options).format(date);
   };
 
   const diff = calcDaysPassed(new Date(), date);
@@ -137,10 +136,9 @@ const displayMovements = function (acc, sort = false) {
     year: 'numeric',
     // weekday: 'long',
   };
-  labelDate.textContent = new Intl.DateTimeFormat(
-    acc.movementsDates.locale,
-    options
-  ).format(now);
+  labelDate.textContent = new Intl.DateTimeFormat(acc.locale, options).format(
+    now
+  );
 
   //#3 DEPENDING ON SORT CLICKED, SORT BY TRANSACTION DATE VERSUS ASCENDING ORDER SWITCH
   const movs = sort

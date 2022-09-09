@@ -74,7 +74,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 //FUNCTION DISPLAY DATE REGISTER
-const formatMovementDate = function (date) {
+const formatMovementDate = function (acc, date) {
   //FUNCTION DATE DIFFERENCE CALCULATOR
   const calcDaysPassed = (date1, date2) => {
     // console.log(date1, date2);
@@ -83,11 +83,19 @@ const formatMovementDate = function (date) {
   // console.log(new Date(), date);
 
   //FUNCTION DISPLAY DATE REGULAR STAMP
-  const regTransactionStamp = date => {
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+  const regTransactionStamp = (acc, date) => {
+    // const day = `${date.getDate()}`.padStart(2, 0);
+    // const month = `${date.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
+    // const year = date.getFullYear();
+    // return `${day}/${month}/${year}`;
+    const options = {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    };
+    return new Intl.DateTimeFormat(acc.movementsDates.locale, options).format(
+      date
+    );
   };
 
   const diff = calcDaysPassed(new Date(), date);
@@ -99,7 +107,7 @@ const formatMovementDate = function (date) {
       ? 'YESTERDAY'
       : diff >= 2 && diff <= 7
       ? `${diff} DAYS AGO`
-      : regTransactionStamp(date);
+      : regTransactionStamp(acc, date);
   // console.log(displayDate);
   return displayDate;
 };
@@ -127,7 +135,7 @@ const displayMovements = function (acc, sort = false) {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-    weekday: 'long',
+    // weekday: 'long',
   };
   labelDate.textContent = new Intl.DateTimeFormat(
     acc.movementsDates.locale,
@@ -149,7 +157,7 @@ const displayMovements = function (acc, sort = false) {
     const date = new Date(acc.movementsDates[index]);
     //NOTE First create a javascript date object from the given arr input
     //#4.2.1 TIME STAMP CHECK FOR TODAY & YESTERDAY, OR REGULAR TIME STAMP?
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(acc, date);
     //#4.3 Render the transaction on the screen inside the class="movements" container element
     const htmlInsert = `
     <div class="movements__row">

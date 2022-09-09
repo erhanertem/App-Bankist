@@ -91,7 +91,7 @@ const formatMovementDate = function (date) {
   };
 
   const diff = calcDaysPassed(new Date(), date);
-  console.log(diff);
+  // console.log(diff);
   const displayDate =
     diff === 0
       ? 'TODAY'
@@ -100,7 +100,7 @@ const formatMovementDate = function (date) {
       : diff >= 2 && diff <= 7
       ? `${diff} DAYS AGO`
       : regTransactionStamp(date);
-  console.log(displayDate);
+  // console.log(displayDate);
   return displayDate;
 };
 
@@ -111,14 +111,28 @@ const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
   //#2 CURRENT BALANCE TIMESTAMP
-  const now = new Date(); //get the current system time
-  // labelDate.textContent = now;
-  const day = `${now.getDate()}`.padStart(2, 0);
-  const month = `${now.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
-  const year = now.getFullYear();
-  const hour = `${now.getHours()}`.padStart(2, 0);
-  const min = `${now.getMinutes()}`.padStart(2, 0);
-  labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+  // const now = new Date(); //get the current system time
+  // // labelDate.textContent = now;
+  // const day = `${now.getDate()}`.padStart(2, 0);
+  // const month = `${now.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
+  // const year = now.getFullYear();
+  // const hour = `${now.getHours()}`.padStart(2, 0);
+  // const min = `${now.getMinutes()}`.padStart(2, 0);
+  // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+  //Utilizing INTL WEB API
+  const now = new Date();
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    weekday: 'long',
+  };
+  labelDate.textContent = new Intl.DateTimeFormat(
+    acc.movementsDates.locale,
+    options
+  ).format(now);
 
   //#3 DEPENDING ON SORT CLICKED, SORT BY TRANSACTION DATE VERSUS ASCENDING ORDER SWITCH
   const movs = sort

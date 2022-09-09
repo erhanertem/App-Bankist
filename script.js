@@ -97,8 +97,8 @@ const formatMovementDate = function (date) {
       ? 'TODAY'
       : diff === 1
       ? 'YESTERDAY'
-      : diff === 2
-      ? '2 DAYS AGO'
+      : diff >= 2 && diff <= 7
+      ? `${diff} DAYS AGO`
       : regTransactionStamp(date);
   console.log(displayDate);
   return displayDate;

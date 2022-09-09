@@ -73,53 +73,68 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-//FUNCTION-DISPLAY USER TRANSACTION DATA
+//FUNCTION DISPLAY USER TRANSACTION DATA
 const displayMovements = function (acc, sort = false) {
-  //Empty the entire movements container
-  /*NOTE:
-   * textContents is all text contained by an element and all its children that are for formatting purposes only.
-   * innerText returns all text contained by an element and all its child elements.
-   * innerHtml returns all text, including html tags, that is contained by an element.
-   */
+  //#1 EMPTY THE ENTIRE MOVEMENTS CONTAINER
+  //NOTE * textContents is all text contained by an element and all its children that are for formatting purposes only. * innerText returns all text contained by an element and all its child elements. * innerHtml returns all text, including html tags, that is contained by an element.
   containerMovements.innerHTML = '';
 
-  //DEPENDING ON SORT CLICKED, SORT BY TRANSACTION DATE VERSUS ASCENDING ORDER SWITCH
+  //#2 CURRENT BALANCE TIMESTAMP
+  const now = new Date(); //get the current system time
+  // labelDate.textContent = now;
+  const day = `${now.getDate()}`.padStart(2, 0);
+  const month = `${now.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
+  const year = now.getFullYear();
+  const hour = `${now.getHours()}`.padStart(2, 0);
+  const min = `${now.getMinutes()}`.padStart(2, 0);
+  labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+
+  //#3 DEPENDING ON SORT CLICKED, SORT BY TRANSACTION DATE VERSUS ASCENDING ORDER SWITCH
   const movs = sort
     ? acc.movements.slice().sort((a, b) => a - b)
     : acc.movements;
   // slice() to make a shallow copy as sort mutates the array
   // if sort =true slice().sort() else keep array as it appears by date of transaction
 
-  //RENDER THE TRANSACTION LINES PER SORT TYPE
+  //#4 RENDER THE TRANSACTION LINES PER SORT TYPE
   movs.forEach(function (mov, index) {
-    //Designate the type of transaction
+    //#4.1 Designate the type of transaction for each item
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+    //#4.2 Provide the date of transaction for each item
+    const date = new Date(acc.movementsDates[index]);
+    //NOTE First create a javascript date object from the given input
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
+    const year = date.getFullYear();
+    const displayDate = `${day}/${month}/${year}`;
 
-    //Render the transaction on the screen inside the class="movements" container element
+    //#4.3 Render the transaction on the screen inside the class="movements" container element
     const htmlInsert = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}">${
       index + 1
     } ${type}</div>
-      <div class="movements__date">3 days ago</div>
+      <div class="movements__date">${displayDate}</div>
       <div class="movements__value">${mov.toFixed(2)}€</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
   });
 
+  //#5 RENDER STRIPED ROWS FOR THE MOVEMENTS LIST
   [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
     if (i % 2 === 0) row.style.backgroundColor = '#EBEBEB';
   });
+  //NOTE console.log([...document.querySelectorAll('.movements__row')]); // Provides a selected nodelist array based on the provided class. We spread and then put in a real arrya construct
 };
 
-//FUNCTION-CALCULATE AND RENDER THE ACCOUNT BALANCE
+//FUNCTION CALCULATE AND RENDER THE ACCOUNT BALANCE
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
-//FUNCTION-CALCULATE TRANSACTIONS DISPLAY SUMMARY
+//FUNCTION CALCULATE TRANSACTIONS DISPLAY SUMMARY
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
@@ -139,7 +154,7 @@ const calcDisplaySummary = function (acc) {
   labelSumInterest.textContent = `${interests.toFixed(2)}€`;
 };
 
-//FUNCTION-SAVE USER NAME INITIALS ON THE ACCOUNT OBJECTS
+//FUNCTION SAVE USER NAME INITIALS ON THE ACCOUNT OBJECTS
 const createUserName = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -150,7 +165,7 @@ const createUserName = function (accs) {
   });
 };
 
-//FUNCTION-UPDATE UI
+//FUNCTION UPDATE UI
 const updateUI = function (acc) {
   //DISPLAY MOVEMENTS
   displayMovements(acc);
@@ -160,24 +175,28 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
-//EVENTHANDLER--USER LOGIN
-
+//EVENTHANDLER USER LOGIN
 let currentAccount;
 createUserName(accounts);
 
+//TEMP FAKE LOGIN
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
 btnLogin.addEventListener('click', function (e) {
-  //IMPORTANT: STOP BUTTON ELEMENT TO REFRESH WEB PAGE/PREVENT FORM FROM SUBMITTING ON ITSELF
+  //IMPORTANT STOP BUTTON ELEMENT TO REFRESH WEB PAGE/PREVENT FORM FROM SUBMITTING ON ITSELF
   e.preventDefault();
   // console.log('LOGIN');
-  //SUBTASK--CHECK IF THE USERNAME EXISTS
+  //CHECK IF THE USERNAME EXISTS
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
   // console.log(currentAccount);
-  //SUBTASK--IF USERNAME IS AVAILABLE, DOES THE PIN MATCH TO WHAT IS IN THE DATA?
+  //CHECK IF USERNAME IS AVAILABLE, DOES THE PIN MATCH TO WHAT IS IN THE DATA?
   if (currentAccount?.pin === +inputLoginPin.value) {
     // console.log('LOGIN SUCCESFULL');
-    //SUBTASK--POST LOGIN PROCESSES
+    //POST LOGIN PROCESSES
     //DISPLAY UI MESSAGE
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
@@ -186,14 +205,14 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
     //CLEAR USERNAME/PASS INPUT FIELDS
     inputLoginUsername.value = inputLoginPin.value = '';
-    inputLoginPin.blur(); //IMPORTANT: removes the focus from the element
-    //TODO-SWITCH login btn with logout
+    inputLoginPin.blur(); //IMPORTANT removes the focus from the element
+    //TODO SWITCH login btn with logout
     //UPDATE UI
     updateUI(currentAccount);
   }
 });
 
-//EVENTHANDLER--TRANSFER MONEY
+//EVENTHANDLER TRANSFER MONEY
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log("TRANSFER")
@@ -216,12 +235,15 @@ btnTransfer.addEventListener('click', function (e) {
     //TRANSFER MONEY
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
+    //ADD TIMESTAMP FOR THE NEW MOVEMENT OUTGOING & INCOMING
+    currentAccount.movementsDates.push(new Date());
+    receiverAcc.movementsDates.push(new Date());
     //UPDATE UI
     updateUI(currentAccount);
   }
 });
 
-//EVENTHANDLER--REQUEST LOAN
+//EVENTHANDLER REQUEST LOAN
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log('LOAN');
@@ -232,6 +254,8 @@ btnLoan.addEventListener('click', function (e) {
   ) {
     //ADD MOVEMENT
     currentAccount.movements.push(loanRequestAmount);
+    //ADD TIMESTAMP FOR THE NEW MOVEMENT
+    currentAccount.movementsDates.push(new Date());
     //UPDATE UI
     updateUI(currentAccount);
   }
@@ -239,7 +263,7 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
 });
 
-//EVENTHANDLER--CLOSE ACCOUNT
+//EVENTHANDLER CLOSE ACCOUNT
 btnClose.addEventListener('click', function (e) {
   e.preventDefault(); //Prevent default button submit behaviour
   // console.log("DELETE")
@@ -251,7 +275,7 @@ btnClose.addEventListener('click', function (e) {
     const index = accounts.findIndex(
       acc => acc.username === currentAccount.username
     );
-    // NOTE: findIndex() is used here instead of indexOf() since we are trying to solicit the object data inside one of the elements of the array not the array element itself.
+    //NOTE findIndex() is used here instead of indexOf() since we are trying to solicit the object data inside one of the elements of the array not the array element itself.
     // console.log(index);
     //DELETE THE USER FROM THE ACCOUNTS DATA
     accounts.splice(index, 1);
@@ -265,8 +289,8 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 
-//EVENTHANDLER--SORT
-let sorted = false; // IMPORTANT: intermediary variable that lets us switch the states - INITIAL STATE
+//EVENTHANDLER SORT TRANSACTIONS
+let sorted = false; //IMPORTANT intermediary variable that lets us switch the states - INITIAL STATE
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   // console.log('SORT');
@@ -274,5 +298,5 @@ btnSort.addEventListener('click', function (e) {
   // displayMovements(currentAccount, true); //sort set to true as function argument
   displayMovements(currentAccount, !sorted); //sort set to true as function argument
   sorted = !sorted;
-  // IMPORTANT: Negate the current sorted state to enable sowtching the next time. Without this, the state would have never been switching
+  //VERY IMPORTANT Negate the current sorted state to enable sowtching the next time. Without this, the state would have never been switching
 });

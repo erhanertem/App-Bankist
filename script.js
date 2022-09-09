@@ -17,9 +17,9 @@ const account1 = {
     '2020-01-28T09:15:04.904Z',
     '2020-04-01T10:17:24.185Z',
     '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2022-09-07T17:01:17.194Z',
+    '2022-09-08T23:36:17.929Z',
+    '2022-09-09T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -38,8 +38,8 @@ const account2 = {
     '2020-01-25T14:18:46.235Z',
     '2020-02-05T16:33:06.386Z',
     '2020-04-10T14:43:26.374Z',
-    '2020-06-25T18:49:59.371Z',
-    '2020-07-26T12:01:20.894Z',
+    '2022-09-08T18:49:59.371Z',
+    '2022-09-09T12:01:20.894Z',
   ],
   currency: 'USD',
   locale: 'en-US',
@@ -73,12 +73,34 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-//FUNCTION DATE REGISTER
+//FUNCTION DISPLAY DATE REGISTER
 const formatMovementDate = function (date) {
-  const day = `${date.getDate()}`.padStart(2, 0);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
-  const year = date.getFullYear();
-  const displayDate = `${day}/${month}/${year}`;
+  //FUNCTION DATE DIFFERENCE CALCULATOR
+  const calcDaysPassed = (date1, date2) => {
+    // console.log(date1, date2);
+    return Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+  }; // turn into days from miliseconds after substraction of dates
+  // console.log(new Date(), date);
+
+  //FUNCTION DISPLAY DATE REGULAR STAMP
+  const regTransactionStamp = date => {
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0); //0 based to added 1 to reflect the current month
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const diff = calcDaysPassed(new Date(), date);
+  console.log(diff);
+  const displayDate =
+    diff === 0
+      ? 'TODAY'
+      : diff === 1
+      ? 'YESTERDAY'
+      : diff === 2
+      ? '2 DAYS AGO'
+      : regTransactionStamp(date);
+  console.log(displayDate);
   return displayDate;
 };
 
@@ -111,13 +133,9 @@ const displayMovements = function (acc, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     //#4.2 Provide the date of transaction for each item
     const date = new Date(acc.movementsDates[index]);
-    //NOTE First create a javascript date object from the given input
-
+    //NOTE First create a javascript date object from the given arr input
     //#4.2.1 TIME STAMP CHECK FOR TODAY & YESTERDAY, OR REGULAR TIME STAMP?
-
-    //#4.2.2 TIME STAMP OLDER DAYS IN REGULAR FORMAT
     const displayDate = formatMovementDate(date);
-
     //#4.3 Render the transaction on the screen inside the class="movements" container element
     const htmlInsert = `
     <div class="movements__row">

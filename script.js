@@ -246,16 +246,10 @@ const updateUI = function (acc) {
 //FUNCTION LOGOUT TIMER
 const startLogOutTimer = function (acc, logOutMinutes) {
   // Setting time to 5 minutes from the time logged in miliseconds value
-
-  const current = new Date().getTime();
-
   let watchMinutes = logOutMinutes * 1000 * 60;
   let watchMinutesInt = formatIntlTime(acc, watchMinutes);
   labelTimer.textContent = `${watchMinutesInt}`;
 
-  const reachTime = current + watchMinutes;
-
-  console.log(current, watchMinutes, reachTime);
   // Call the timer every second
   const timer = setInterval(function () {
     watchMinutes = watchMinutes - 1000;
@@ -267,6 +261,7 @@ const startLogOutTimer = function (acc, logOutMinutes) {
       logOutUser();
     }
   }, 1000);
+  return timer; //return timer if the user logs out before times out so that we can reset it in the global scope befire we can log into a new user otherwise multipole timers will be on and would trip the timer
 };
 
 //FUNCTION LOGOUT CLEAR UI
@@ -278,7 +273,7 @@ const logOutUser = function () {
 };
 
 //EVENTHANDLER USER LOGIN
-let currentAccount;
+let currentAccount, timer;
 createUserName(accounts);
 
 // //TEMP FAKE LOGIN
@@ -311,7 +306,9 @@ btnLogin.addEventListener('click', function (e) {
     //TODO SWITCH login btn with logout
     //UPDATE UI
     updateUI(currentAccount);
-    startLogOutTimer(currentAccount, 2);
+    //START LOGOUT TIMER
+    if (timer) clearInterval(timer); //catch logout timers keep going on before it dies and use rlogs onto a new account
+    timer = startLogOutTimer(currentAccount, 2);
   }
 });
 

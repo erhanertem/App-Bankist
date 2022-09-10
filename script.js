@@ -6,7 +6,7 @@
 
 // Data
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Erhan Ertem',
   movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -111,12 +111,19 @@ const formatMovementDate = function (acc, date) {
   return displayDate;
 };
 
-//FUNCTION FORMAT PER INTL
+//FUNCTION FORMAT NUMBER PER INTL
 const formatIntl = (acc, mov) =>
   new Intl.NumberFormat(acc.locale, {
     style: 'currency',
     currency: acc.currency,
   }).format(mov);
+
+//FUNCTION FORMAT LILISECONDS TIME PER INTL
+const formatIntlTime = (acc, miliseconds) =>
+  new Intl.DateTimeFormat(acc.locale, {
+    minute: 'numeric',
+    second: 'numeric',
+  }).format(miliseconds);
 
 //FUNCTION DISPLAY USER TRANSACTION DATA
 const displayMovements = function (acc, sort = false) {
@@ -236,14 +243,48 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+//FUNCTION LOGOUT TIMER
+const startLogOutTimer = function (acc, logOutMinutes) {
+  // Setting time to 5 minutes from the time logged in miliseconds value
+
+  const current = new Date().getTime();
+
+  let watchMinutes = logOutMinutes * 1000 * 60;
+  let watchMinutesInt = formatIntlTime(acc, watchMinutes);
+  labelTimer.textContent = `${watchMinutesInt}`;
+
+  const reachTime = current + watchMinutes;
+
+  console.log(current, watchMinutes, reachTime);
+  // Call the timer every second
+  const timer = setInterval(function () {
+    watchMinutes = watchMinutes - 1000;
+    watchMinutesInt = formatIntlTime(acc, watchMinutes);
+    labelTimer.textContent = `${watchMinutesInt}`;
+    // When 0 seconds, stop timer and logout the user
+    if (watchMinutes === 0) {
+      clearInterval(timer);
+      logOutUser();
+    }
+  }, 1000);
+};
+
+//FUNCTION LOGOUT CLEAR UI
+const logOutUser = function () {
+  //HIDE ACCOUNT UI
+  containerApp.style.opacity = 0;
+  //RESET LOGIN UI MESSAGE
+  labelWelcome.textContent = 'Log in to get started';
+};
+
 //EVENTHANDLER USER LOGIN
 let currentAccount;
 createUserName(accounts);
 
-//TEMP FAKE LOGIN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// //TEMP FAKE LOGIN
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
   //IMPORTANT STOP BUTTON ELEMENT TO REFRESH WEB PAGE/PREVENT FORM FROM SUBMITTING ON ITSELF
@@ -270,6 +311,7 @@ btnLogin.addEventListener('click', function (e) {
     //TODO SWITCH login btn with logout
     //UPDATE UI
     updateUI(currentAccount);
+    startLogOutTimer(currentAccount, 2);
   }
 });
 
@@ -344,10 +386,7 @@ btnClose.addEventListener('click', function (e) {
     //DELETE THE USER FROM THE ACCOUNTS DATA
     accounts.splice(index, 1);
     // console.log(accounts);
-    //HIDE ACCOUNT UI
-    containerApp.style.opacity = 0;
-    //RESET LOGIN UI MESSAGE
-    labelWelcome.textContent = 'Log in to get started';
+    logOutUser();
   }
   //RESET CLOSE ACCOUNT INPUT FIELDS
   inputCloseUsername.value = inputClosePin.value = '';

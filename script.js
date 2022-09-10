@@ -313,12 +313,15 @@ btnLoan.addEventListener('click', function (e) {
     loanRequestAmount > 0 &&
     currentAccount.movements.some(mov => mov > loanRequestAmount * 0.1)
   ) {
-    //ADD MOVEMENT
-    currentAccount.movements.push(loanRequestAmount);
-    //ADD TIMESTAMP FOR THE NEW MOVEMENT
-    currentAccount.movementsDates.push(new Date().toISOString());
-    //UPDATE UI
-    updateUI(currentAccount);
+    //SIMULATE BELATED APPROVAL PROCESSING...
+    setTimeout(function () {
+      //ADD MOVEMENT
+      currentAccount.movements.push(loanRequestAmount);
+      //ADD TIMESTAMP FOR THE NEW MOVEMENT
+      currentAccount.movementsDates.push(new Date().toISOString());
+      //UPDATE UI
+      updateUI(currentAccount);
+    }, 2500);
   }
   //CLEAR LOAN INPUT VALUE
   inputLoanAmount.value = '';

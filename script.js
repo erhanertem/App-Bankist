@@ -340,6 +340,10 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAcc.movementsDates.push(new Date().toISOString());
     //UPDATE UI
     updateUI(currentAccount);
+    //RESET TIMER
+    clearInterval(timer);
+    //START A NEW TIMER
+    timer = startLogOutTimer(currentAccount, 2);
   }
 });
 
@@ -364,6 +368,10 @@ btnLoan.addEventListener('click', function (e) {
   }
   //CLEAR LOAN INPUT VALUE
   inputLoanAmount.value = '';
+  //RESET TIMER
+  clearInterval(timer);
+  //START A NEW TIMER
+  timer = startLogOutTimer(currentAccount, 2);
 });
 
 //EVENTHANDLER CLOSE ACCOUNT

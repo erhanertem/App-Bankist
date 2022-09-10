@@ -18,7 +18,8 @@
     - forEach(), push(), find(), some(), every(), findIndex(), join(), split(), filter(), reduce(), map(), Number()
   - Utilize method chaining
   - Working with Math object methods
-    - Math.floor(), .toFixed()
+    - Math.floor(), Math.abs(), .toFixed()
+    - Working with Date and Intl objects
 
 &emsp;
 

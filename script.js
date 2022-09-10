@@ -111,6 +111,13 @@ const formatMovementDate = function (acc, date) {
   return displayDate;
 };
 
+//FUNCTION FORMAT PER INTL
+const formatIntl = (acc, mov) =>
+  new Intl.NumberFormat(acc.locale, {
+    style: 'currency',
+    currency: acc.currency,
+  }).format(mov);
+
 //FUNCTION DISPLAY USER TRANSACTION DATA
 const displayMovements = function (acc, sort = false) {
   //#1 EMPTY THE ENTIRE MOVEMENTS CONTAINER
@@ -156,14 +163,16 @@ const displayMovements = function (acc, sort = false) {
     //NOTE First create a javascript date object from the given arr input
     //#4.2.1 TIME STAMP CHECK FOR TODAY & YESTERDAY, OR REGULAR TIME STAMP?
     const displayDate = formatMovementDate(acc, date);
-    //#4.3 Render the transaction on the screen inside the class="movements" container element
+    //#4.2.2 FORMAT CURRENCY
+    const formattedMov = formatIntl(acc, mov);
+    //#4.3 RENDER TRANSACTIONS INSIDE THE "movements" CONTAINER CLASS ELEMENT
     const htmlInsert = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}">${
       index + 1
     } ${type}</div>
       <div class="movements__date">${displayDate}</div>
-      <div class="movements__value">${mov.toFixed(2)}€</div>
+      <div class="movements__value">${formattedMov}</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', htmlInsert);
@@ -179,7 +188,8 @@ const displayMovements = function (acc, sort = false) {
 //FUNCTION CALCULATE AND RENDER THE ACCOUNT BALANCE
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  // labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  labelBalance.textContent = `${formatIntl(acc, acc.balance)}`;
 };
 
 //FUNCTION CALCULATE TRANSACTIONS DISPLAY SUMMARY
@@ -187,19 +197,22 @@ const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  // labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${formatIntl(acc, incomes)}`;
 
   const expenses = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(expenses).toFixed(2)}€`;
+  // labelSumOut.textContent = `${Math.abs(expenses).toFixed(2)}€`;
+  labelSumOut.textContent = `${formatIntl(acc, Math.abs(expenses))}`;
 
   const interests = acc.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => int >= 1) //exclude interests lesser than 1euro
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumInterest.textContent = `${interests.toFixed(2)}€`;
+  // labelSumInterest.textContent = `${interests.toFixed(2)}€`;
+  labelSumInterest.textContent = `${formatIntl(acc, interests)}`;
 };
 
 //FUNCTION SAVE USER NAME INITIALS ON THE ACCOUNT OBJECTS

@@ -4,7 +4,7 @@
 
 ## Udemy The Complete JavaScript Course 2022 From Zero to Expert! by Jonas Schmedtmann
 
-### **Objective:** Create app for a fictitious Bank called 'Bankist'
+### **Objective:** Create pseudo app for a fictitious Bank called 'Bankist'
 
 - Get into programming algorithm and logic diagram
 - JS DOM Manipulation and Events
@@ -16,14 +16,17 @@
 - JS fundamentals
   - Working with array and string methods:
     - forEach(), push(), find(), some(), every(), findIndex(), join(), split(), filter(), reduce(), map(), Number()
-  - Utilize method chaining
+    - Utilize method chaining
   - Working with Math object methods
     - Math.floor(), Math.abs(), .toFixed()
-    - Working with Date and Intl objects
+  - Working with Date and Intl objects
+  - Working with setInterval(), clearInterval(), setTimeout()
 
 &emsp;
 
 #### Link to Project &rarr; [Bankist-App](https://bankist-app-erhan-ertem.netlify.app)
+
+username: ee , pass: 1111 / username: jd , pass: 2222
 
 ---
 
